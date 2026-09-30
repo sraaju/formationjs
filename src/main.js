@@ -1,4 +1,9 @@
+import {promiseImage} from './datas.js'
+import { loadImagesSelectOptions } from './pages/editor/editor.js';
 console.log("hello world");
+
+//const images = [];
+
 var wrapper;
 
 function LoadDate() {
@@ -13,6 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
   wrapper = document.querySelector("#wrapper");
   initNavbar();
   constructMainRouteContent(location.pathname);
+  // promiseImage.then()
 });
 
 function initNavbar() {
@@ -45,7 +51,14 @@ function constructMainRouteContent(path) {
 }
 
 function loadDOMEditor() {
-  loadWrapperContent("/src/pages/editor/editor.html");
+  const promiseLoadingPage = loadWrapperContent("/src/pages/editor/editor.html");
+  promiseLoadingPage.then((r)=>{
+    console.log('fin de chargement');
+  });
+  Promise.all([promiseImage,promiseLoadingPage]).then(arrayDesReponses=>{
+    console.log('tous charement effectue', arrayDesReponses)
+    loadImagesSelectOptions(arrayDesReponses[0])
+  })
 }
 
 function loadDOMThumbnail() {
@@ -59,14 +72,19 @@ function loadDOMHome() {
 
 /**
  * Fontion de chargement du wrapper provenant d'un adresse en param
- * @param {string} pageUrl url de la page html a chargé 
- * @returns {undefined} return rien
+ * @param {string} pageUrl url de la page html a chargé
+ * @returns {Promise} return 
  */
 const loadWrapperContent = (pageUrl) => {
   const promise = fetch(pageUrl).then((response) => {
     return response.text();
   });
-  promise.then((html) => {
+  return promise.then((html) => {
     wrapper.innerHTML = html;
+    return wrapper;
   });
 };
+
+
+
+
