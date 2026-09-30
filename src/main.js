@@ -53,5 +53,7 @@ function loadDOMThumbnail() {
 }
 
 function loadDOMHome() {
-  wrapper.innerHTML = "<h1>Home</h1>";
+  const promise=fetch('/src/pages/home/home.html').then((response)=>{return response.text()})
+  promise.then((html)=>{wrapper.innerHTML = html;})
+ 
 }
