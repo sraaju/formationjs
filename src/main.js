@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
   LoadDate();
   wrapper = document.querySelector("#wrapper");
   initNavbar();
-  constructMainRouteContent(location.pathname)
+  constructMainRouteContent(location.pathname);
 });
 
 function initNavbar() {
@@ -22,7 +22,7 @@ function initNavbar() {
     link.addEventListener("click", function (evt) {
       evt.preventDefault();
       console.log(evt);
-      constructMainRouteContent(evt.target.attributes["href"].value)
+      constructMainRouteContent(evt.target.attributes["href"].value);
 
       history.pushState(null, "", evt.target.attributes["href"].value);
     });
@@ -45,15 +45,28 @@ function constructMainRouteContent(path) {
 }
 
 function loadDOMEditor() {
-  wrapper.innerHTML = "<h1>Editor</h1>";
+  loadWrapperContent("/src/pages/editor/editor.html");
 }
 
 function loadDOMThumbnail() {
-  wrapper.innerHTML = "<h1>Thumbnail</h1>";
+  //  wrapper.innerHTML = "<h1>Thumbnail</h1>";
+  loadWrapperContent("/src/pages/thumbnail/thumbnail.html");
 }
 
 function loadDOMHome() {
-  const promise=fetch('/src/pages/home/home.html').then((response)=>{return response.text()})
-  promise.then((html)=>{wrapper.innerHTML = html;})
- 
+  loadWrapperContent("/src/pages/home/home.html");
 }
+
+/**
+ * Fontion de chargement du wrapper provenant d'un adresse en param
+ * @param {string} pageUrl url de la page html a chargé 
+ * @returns {undefined} return rien
+ */
+const loadWrapperContent = (pageUrl) => {
+  const promise = fetch(pageUrl).then((response) => {
+    return response.text();
+  });
+  promise.then((html) => {
+    wrapper.innerHTML = html;
+  });
+};
